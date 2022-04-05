@@ -1,6 +1,6 @@
 # Import rebill function for slack command
 
-from RebillDataSlackFunction import rebillsdata
+from RebillDataFunction import rebillsdata
 
 ### Slack Reporting
 
