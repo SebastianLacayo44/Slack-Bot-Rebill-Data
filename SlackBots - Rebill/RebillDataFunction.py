@@ -107,7 +107,7 @@ def rebillsdata():
 
         # Fix rows due to bad join on df multiple
 
-        df_multiple = df_multiple.loc[df_multiple['shippedDate'] >= df_multiple['subSignUpDate']]
+        df_multiple = df_multiple.loc[df_multiple['shippedDate'] >= df_multiple['subSignUpDate']] 
         df_multiple.reset_index(drop = True, inplace =True)
 
         # Impute "next" expected payment date values for cancellations
@@ -129,7 +129,7 @@ def rebillsdata():
         df_unique['order count'] = df_unique.sort_values(['subscriptionId', 'Date']).groupby(['subscriptionId']).cumcount()
         df_multiple['order count'] = df_multiple.sort_values(['subscriptionId', 'Date']).groupby(['subscriptionId']).cumcount()
 
-        # Next rebill Count
+        # Calculate next rebill Count
 
         df_unique['next rebill'] = df_unique['order count'] + 1
         df_multiple['next rebill'] = df_multiple['order count'] + 1
@@ -242,7 +242,7 @@ def rebillsdata():
 
             expected_rebill_df['expected'] = (expected_rebill_df['subTotal'] * expected_rebill_df['rev%'])
 
-            # Print statements 
+            # Print Slack statements 
 
             today = datetime.today().strftime("%B %#d")
 
