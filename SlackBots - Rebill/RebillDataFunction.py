@@ -2,16 +2,16 @@
 
 def rebillsdata():
     """
-    * Mapped out current amount of rebills for both dfs
-    * Added projected next rebill count for both dfs
-    * Filter out people who cancelled before March 1st for both dfs
-    * Filter out people who won't be rebilled within 120 days of March 1st for both dfs
-    * Keep latest rebill only
-    * Validate both dfs
-    * Create a function with all of the above
-    * Apply the renewal table
+    This function serves to estimate projected rebill revenue for a period of time using fixed retention rates. 
+    It also returns revenue from new subscriptions and realized rebill revenue. We have two main dataframes, both 
+    contain subscriber information. However, one contains subscribers with multiple orders—which makes joins more complicated. 
+    
+    The main hurdle was matching subscriber data with an additional table containing order history to 
+    determine which rebill a certain subscriber is on so we can apply the correct retention rate. 
+    Then, we could sum up expected revenue and apply appropriate retention rates as an approximation. 
     """
-
+    # import modules
+    
     import pandas  as pd
     import numpy as np
     import pyodbc
@@ -21,24 +21,24 @@ def rebillsdata():
 
     # access azsqldb
 
-    server='*'          # ommitted for security purposes
-    database='*'        # ommitted for security purposes
-    username='*'        # ommitted for security purposes
-    password='*'        # ommitted for security purposes
+    server='*'                      # ommitted for security purposes
+    database='*'                    # ommitted for security purposes
+    username='*'                    # ommitted for security purposes
+    password='*'                    # ommitted for security purposes
     driver='{ODBC Driver 17 for SQL Server}'
 
     conn = pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
 
     ### Queries (ommitted for security purposes)
 
-    # Query for table containing unique subscriptions 
+    # Query for table containing subscribers with one subscription
 
     query_unqsubs =    """
                        *
                   
                        """
 
-    # Query for table where users have multiple subs
+    # Query for table where subscribers have multiple subs
 
     query_mult =      """
                       *
@@ -59,7 +59,7 @@ def rebillsdata():
     df_ren = pd.read_sql_query(query_ren, conn)
 
 
-    ### Function we may need later
+    # Function we use later
 
     def avg(periods):
         averages = []
@@ -68,7 +68,7 @@ def rebillsdata():
             averages.append(avg/100)
         return averages
 
-    # Define rebill rates
+    # Define fixed rebill rates
 
     all_time_first = [39,39,48,44,50,43,45,44,47,38,36,32,40]
     all_time_second = [28,14,18,13,17,13,14,13,15]
