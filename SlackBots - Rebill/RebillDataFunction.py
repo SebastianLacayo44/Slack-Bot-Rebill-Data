@@ -19,106 +19,40 @@ def rebillsdata():
 
     pd.options.mode.chained_assignment = None
 
-
     # access azsqldb
 
-    server='giddy-salesforce.database.windows.net'
-    database='salesforce-data'
-    username='sqladmin'
-    password='{1209Giddy}'   
+    server='*'          # ommitted for security purposes
+    database='*'        # ommitted for security purposes
+    username='*'        # ommitted for security purposes
+    password='*'        # ommitted for security purposes
     driver='{ODBC Driver 17 for SQL Server}'
 
     conn = pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
 
-    ### Queries
+    ### Queries (ommitted for security purposes)
 
     # Query for table containing unique subscriptions 
 
     query_unqsubs =    """
-                  SELECT [orderNumber]
-                  ,[customerId]
-                  ,[orderStatus]
-                  ,[orderStatusId]
-                  ,[createdDate]
-                  ,[modifiedDate]
-                  ,[shippedDate]
-                  ,[productId]
-                  ,[prodOrderId]
-                  ,[productSKU]
-                  ,[productName]
-                  ,[email]
-                  ,[subscriptionId]
-                  ,[subOrderId]
-                  ,[miniBCPersonId]
-                  ,[miniBCProdSKU]
-                  ,[subSignUpDate]
-                  ,[subCancellationDate]
-                  ,[subNextPaymentDate]
-                  ,[subPauseDate]
-                  ,[subfrq]
-                  ,[subTotal]
-                  ,[subStatus]
-                  ,[subPayMethod]
-                  ,[subProdTotal]
-                  ,[uniqueEmail]
-                  ,[instances]
-                  ,[discountAmount]
-                  ,[couponDiscount] 
-                  FROM [dbo].[SebastianMiniBCView_SubscriptionUnique] 
-                  WHERE [subscriptionId] IS NOT NULL AND
-                        [productSKU] NOT LIKE '%RS%' AND
-                        ([orderStatus] = 'Shipped' OR [orderStatus] = 'Awaiting Fulfillment')
-                  """
+                       *
+                  
+                       """
 
     # Query for table where users have multiple subs
 
-    query_mult =  """
-              SELECT [orderNumber]
-              ,[customerId]
-              ,[orderStatus]
-              ,[orderStatusId]
-              ,[createdDate]
-              ,[modifiedDate]
-              ,[shippedDate]
-              ,[productId]
-              ,[prodOrderId]
-              ,[productSKU]
-              ,[productName]
-              ,[email]
-              ,[subscriptionId]
-              ,[subOrderId]
-              ,[miniBCPersonId]
-              ,[miniBCProdSKU]
-              ,[subSignUpDate]
-              ,[subCancellationDate]
-              ,[subNextPaymentDate]
-              ,[subPauseDate]
-              ,[subfrq]
-              ,[subTotal]
-              ,[subStatus]
-              ,[subPayMethod]
-              ,[subProdTotal]
-              ,[uniqueEmail]
-              ,[instances]
-              ,[discountAmount]
-              ,[couponDiscount] 
-             FROM [dbo].[SebastianMiniBCView_SubscriptionDupes] 
-             WHERE [subscriptionId] IS NOT NULL AND
-                   [productSKU] NOT LIKE '%RS%' AND
-                   ([orderStatus] = 'Shipped' OR [orderStatus] = 'Awaiting Fulfillment')
-             """
+    query_mult =      """
+                      *
+                    
+                      """
 
     # Query for table containing failed rebill attempts
 
-    query_ren = """
-             SELECT [subscription_id]
-             ,[order_id]
-             ,[payment_status]
-             ,[renewal_date]
-             FROM [dbo].[MiniBCRenewals]
-             """
+    query_ren =  """
+                 *
+                 
+                 """
     
-    ### Query and import  the data
+    ### Query and import  the data as dataframes
 
     df_unq = pd.read_sql_query(query_unqsubs, conn)
     df_mult =  pd.read_sql_query(query_mult, conn)
@@ -134,14 +68,13 @@ def rebillsdata():
             averages.append(avg/100)
         return averages
 
-    # Define rebill percentages
+    # Define rebill rates
 
     all_time_first = [39,39,48,44,50,43,45,44,47,38,36,32,40]
     all_time_second = [28,14,18,13,17,13,14,13,15]
     all_time_third = [7,5,6,5,6]
     all_time_fourth = [4]
     all_time_fifth = [2]
-    all_time_else = [2]
     purgatory = [2]
 
     ### Function to prepare dataset
@@ -152,18 +85,18 @@ def rebillsdata():
 
         # Unique Dataset
 
-        df_unique.loc[:,'createdDate'] = pd.to_datetime(df_unique.loc[:,'createdDate'])
-        df_unique.loc[:,'subCancellationDate'] = pd.to_datetime(df_unique.loc[:,'subCancellationDate'])
-        df_unique.loc[:,'subNextPaymentDate'] = pd.to_datetime(df_unique.loc[:,'subNextPaymentDate'])
-        df_unique.loc[:,'subSignUpDate'] = pd.to_datetime(df_unique.loc[:,'subSignUpDate'])
+        df_unique.loc[:,'Date'] = pd.to_datetime(df_unique.loc[:,'Date'])
+        df_unique.loc[:,'CancellationDate'] = pd.to_datetime(df_unique.loc[:,'CancellationDate'])
+        df_unique.loc[:,'NextPaymentDate'] = pd.to_datetime(df_unique.loc[:,'NextPaymentDate'])
+        df_unique.loc[:,'SignUpDate'] = pd.to_datetime(df_unique.loc[:,'SignUpDate'])
         df_unique.loc[:,'shippedDate'] = pd.to_datetime(df_unique.loc[:,'shippedDate'])
 
         # Multiple Dataset
 
-        df_multiple.loc[:,'createdDate'] = pd.to_datetime(df_multiple.loc[:,'createdDate'])
-        df_multiple.loc[:,'subCancellationDate'] = pd.to_datetime(df_multiple.loc[:,'subCancellationDate'])
-        df_multiple.loc[:,'subNextPaymentDate'] = pd.to_datetime(df_multiple.loc[:,'subNextPaymentDate'])
-        df_multiple.loc[:,'subSignUpDate'] = pd.to_datetime(df_multiple.loc[:,'subSignUpDate'])
+        df_multiple.loc[:,'Date'] = pd.to_datetime(df_multiple.loc[:,'Date'])
+        df_multiple.loc[:,'CancellationDate'] = pd.to_datetime(df_multiple.loc[:,'CancellationDate'])
+        df_multiple.loc[:,'NextPaymentDate'] = pd.to_datetime(df_multiple.loc[:,'NextPaymentDate'])
+        df_multiple.loc[:,'SignUpDate'] = pd.to_datetime(df_multiple.loc[:,'SignUpDate'])
         df_multiple.loc[:,'shippedDate'] = pd.to_datetime(df_multiple.loc[:,'shippedDate'])
 
         # Add coupon column
@@ -179,24 +112,24 @@ def rebillsdata():
 
         # Impute "next" expected payment date values for cancellations
 
-        df_unique["subNextPaymentDate"] = np.where((df_unique["subStatus"] == "inactive") & (df_unique['subfrq'] == 4), df_unique["createdDate"]  + pd.DateOffset(months=4), df_unique["subNextPaymentDate"])
-        df_unique["subNextPaymentDate"] = np.where((df_unique["subStatus"] == "inactive") & (df_unique['subfrq'] == 6), df_unique["createdDate"]  + pd.DateOffset(months=6), df_unique["subNextPaymentDate"])
-        df_multiple["subNextPaymentDate"] = np.where((df_multiple["subStatus"] == "inactive") & (df_multiple['subfrq'] == 4), df_multiple["createdDate"]  + pd.DateOffset(months=4), df_multiple["subNextPaymentDate"])
-        df_multiple["subNextPaymentDate"] = np.where((df_multiple["subStatus"] == "inactive") & (df_multiple['subfrq'] == 6), df_multiple["createdDate"]  + pd.DateOffset(months=6), df_multiple["subNextPaymentDate"])
+        df_unique["NextPaymentDate"] = np.where((df_unique["Status"] == "inactive") & (df_unique['subfrq'] == 4), df_unique["Date"]  + pd.DateOffset(months=4), df_unique["NextPaymentDate"])
+        df_unique["NextPaymentDate"] = np.where((df_unique["Status"] == "inactive") & (df_unique['subfrq'] == 6), df_unique["Date"]  + pd.DateOffset(months=6), df_unique["NextPaymentDate"])
+        df_multiple["NextPaymentDate"] = np.where((df_multiple["Status"] == "inactive") & (df_multiple['subfrq'] == 4), df_multiple["Date"]  + pd.DateOffset(months=4), df_multiple["NextPaymentDate"])
+        df_multiple["NextPaymentDate"] = np.where((df_multiple["Status"] == "inactive") & (df_multiple['subfrq'] == 6), df_multiple["Date"]  + pd.DateOffset(months=6), df_multiple["NextPaymentDate"])
         
         # Fill feature with null values
 
-        df_unique['cancellationDate'] = df_unique['subCancellationDate'].replace('', np.NaN)
-        df_multiple['cancellationDate'] = df_multiple['subCancellationDate'].replace('', np.NaN)
+        df_unique['CancellationDate'] = df_unique['CancellationDate'].replace('', np.NaN)
+        df_multiple['CancellationDate'] = df_multiple['CancellationDate'].replace('', np.NaN)
 
         ### Count of rebills
 
         # Rebill count
 
-        df_unique['order count'] = df_unique.sort_values(['subscriptionId', 'createdDate']).groupby(['subscriptionId']).cumcount()
-        df_multiple['order count'] = df_multiple.sort_values(['subscriptionId', 'createdDate']).groupby(['subscriptionId']).cumcount()
+        df_unique['order count'] = df_unique.sort_values(['subscriptionId', 'Date']).groupby(['subscriptionId']).cumcount()
+        df_multiple['order count'] = df_multiple.sort_values(['subscriptionId', 'Date']).groupby(['subscriptionId']).cumcount()
 
-        # Next rebill
+        # Next rebill Count
 
         df_unique['next rebill'] = df_unique['order count'] + 1
         df_multiple['next rebill'] = df_multiple['order count'] + 1
@@ -209,21 +142,21 @@ def rebillsdata():
         cutoff = start_date_dt + timedelta(days = days_after)
         cutoff_date = cutoff.strftime("%Y-%m-%#d")
 
-        next_rebillstart_u = df_unique['subNextPaymentDate'].copy() >= datetime.today().strftime("%Y-%m-%#d")
-        next_rebillend_u  = df_unique['subNextPaymentDate'].copy() <= cutoff_date
+        next_rebillstart_u = df_unique['NextPaymentDate'].copy() >= datetime.today().strftime("%Y-%m-%#d")
+        next_rebillend_u  = df_unique['NextPaymentDate'].copy() <= cutoff_date
 
-        next_rebillstart_m =  df_multiple['subNextPaymentDate'].copy() >= datetime.today().strftime("%Y-%m-%#d")
-        next_rebillend_m  =  df_multiple['subNextPaymentDate'].copy() <= cutoff_date
+        next_rebillstart_m =  df_multiple['NextPaymentDate'].copy() >= datetime.today().strftime("%Y-%m-%#d")
+        next_rebillend_m  =  df_multiple['NextPaymentDate'].copy() <= cutoff_date
 
         # Parameters for realized rebills
 
-        from_date_u_realized = df_unique['createdDate'].copy() >= start_date 
-        to_date_u_realized =  df_unique['createdDate'].copy() <= datetime.today().strftime("%Y-%m-%#d")
+        from_date_u_realized = df_unique['Date'].copy() >= start_date 
+        to_date_u_realized =  df_unique['Date'].copy() <= datetime.today().strftime("%Y-%m-%#d")
         rebills_only_u = df_unique['order count'].copy() != 0
         new_buyers_u = df_unique['order count'].copy() == 0
 
-        from_date_m_realized = df_multiple['createdDate'].copy() >= start_date 
-        to_date_m_realized =  df_multiple['createdDate'].copy() <= datetime.today().strftime("%Y-%m-%#d")
+        from_date_m_realized = df_multiple['Date'].copy() >= start_date 
+        to_date_m_realized =  df_multiple['Date'].copy() <= datetime.today().strftime("%Y-%m-%#d")
         rebills_only_m = df_multiple['order count'].copy() != 0
         new_buyers_m = df_multiple['order count'].copy() == 0
 
@@ -289,6 +222,8 @@ def rebillsdata():
 
         expected_revenue_series = (df_expected.groupby('next rebill')['subTotal'].sum())
         expected_amount = int(round(df_expected.groupby('next rebill')['subTotal'].sum().sum(),0)) 
+        
+        # Change output depending on start date and the amount of days after
 
         if expected_amount > 0:
             
@@ -299,7 +234,7 @@ def rebillsdata():
 
             new_subs = df_realized_1st['subscriptionId'].nunique() 
 
-            periods = [all_time_first,all_time_second,all_time_third,all_time_fourth, all_time_fifth, all_time_else]
+            periods = [all_time_first,all_time_second,all_time_third,all_time_fourth, all_time_fifth]
 
             rebill_avgs = pd.Series(avg(periods[:len(expected_revenue_series)]), expected_revenue_series.index.tolist(), name = 'rev%' )
 
