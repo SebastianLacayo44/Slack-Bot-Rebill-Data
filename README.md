@@ -13,9 +13,9 @@ I created a Slackbot that takes different forward slash `/` data reporting reque
 
 This project has three files:
 
-1. SlackBotFunctions.py - Contains all the bot functions ran through Bolt
+1. SlackBotFunctions.py  - Contains all the bot functions ran through Bolt
 2. RebillDataFunction.py - Contains the script used to generate all the rebill data
-3. SampleOutput.png - A sample photo of the output on Slack
+3. SampleOutput.png      - A sample photo of the output on Slack
 
 
 ## Predicting Subscriber Churn
