@@ -5,7 +5,6 @@ Projects I have completed at work. No PII or sensetive data will be uploaded. De
 # Projects
 
 1. [SlackBot - Rebills](#SlackBot)
-2. [Predicting Churn](#Predicting Subscriber Churn)
 
 ## Slackbot
 
@@ -16,6 +15,3 @@ This project has three files:
 1. SlackBotFunctions.py  - Contains all the bot functions ran through Bolt
 2. RebillDataFunction.py - Contains the script used to generate all the rebill data
 3. SampleOutput.png      - A sample photo of the output on Slack
-
-
-## Predicting Subscriber Churn
