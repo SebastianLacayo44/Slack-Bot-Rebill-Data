@@ -1,6 +1,6 @@
-# Work
+# Industry
 
-Projects I have completed at work. No PII or sensetive data will be uploaded. Descriptions of the projects below!
+Projects I have completed at work, shared with management permission and annoymized. Descriptions of the projects below!
 
 # Projects
 
