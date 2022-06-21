@@ -1,6 +1,6 @@
 # Industry
 
-Projects I have completed at work, shared with management permission and annoymized. Descriptions of the projects below!
+Projects I have completed at work, anoymized and shared with permission by management. Descriptions of the projects below!
 
 # Projects
 
