@@ -1,10 +1,4 @@
-# Industry
-
-Projects I have completed at work, anoymized and shared with permission by management. Descriptions of the projects below!
-
-# Projects
-
-1. [SlackBot - Rebills](#SlackBot)
+[SlackBot - Rebills](#SlackBot)
 
 ## Slackbot
 
